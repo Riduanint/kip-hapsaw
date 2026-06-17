@@ -6,7 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 
-// Redirect root to dashboard or login
+// Redirect root to dashboard or landing page
 Route::get('/', function () {
     if (Auth::check()) {
         $sk = 'tab_' . uniqid();
@@ -15,7 +15,8 @@ Route::get('/', function () {
             ? redirect()->route('admin.dashboard', ['sk' => $sk])
             : redirect()->route('user.dashboard', ['sk' => $sk]);
     }
-    return redirect()->route('login');
+    $criteria = \App\Models\Criterion::orderBy('code', 'asc')->get();
+    return view('landing', compact('criteria'));
 });
 
 // Authentication Routes
